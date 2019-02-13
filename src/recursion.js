@@ -7,32 +7,122 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+    if (n < 0) {
+        return null;
+    }
+    if (n === 0) {
+        return 1;
+    }
+    return (n * factorial(n - 1));
+    // (5 * factorial(5 - 1))                           ^ evaluates to (5 * 24) // equals 120
+        // (4 * factorial(4 - 1))                     ^ evaluates to (4 * 6) // equals 24
+            // (3 * factorial(3 - 1))               ^ evaluates to (3 * 2) // equals 6
+                // (2 * factorial(2 - 1))         ^ evaluates to (2 * 1) // equals 2
+                    // (1 * factorial(1 - 1))   ^ evaluates to (1 * 1) // returns 1
+                        // n === 0;          ^ returns 1
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+    var i = array.length - 1;  
+    if (i < 0) {
+        return 0;
+    }
+    return (array[i] + sum(array.slice(0, i)))
+    // (6 + sum([1,2,3,4,5]))                   ^ evaluates (6 + 15) // returns 21
+      // (5 + sum([1,2,3,4]))                 ^ evaluates (5 + 10) // returns 15
+        // (4 + sum([1,2,3]))               ^ evaluates (4 + 6) // returns 10
+          // (3 + sum([1,2]))             ^ evaluates (3 + 3) // returns 6
+            // (2 + sum([1]))           ^ evaluates (2 + 1) // returns 3
+              // (1 + sum([empty]))   ^ evaluates (1 + 0) // returns 1
+                // i < 0            ^ returns 0
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+    // assign variable i to last element in array
+    var i = array.length - 1;  
+
+    // if the array is empty, return 0
+    if (i < 0) {
+        return 0;
+    }
+    // if the last element is an array, recurse on that array
+    if (Array.isArray(array[i])) {
+        return (arraySum(array[i]) + arraySum(array.slice(0, i)));
+    }
+    return (array[i] + arraySum(array.slice(0, i)));
+    // (5 + arraySum([1,[2,3],[[4]]]))            ^ (5 + 10) returns 15
+      // [[4]] is an Array
+        // [4] is an Array
+          // (4 + arraySum([]))
+           // i < 0 returns 0
+             // (4 + 0) returns 4
+               // (4 + arraySum([1,[2,3]]))   ^ (4 + 6) returns 10
+                 // ([2,3] + arraySum([1]) 
+                   // [2,3] is an Array
+                   // (3 + arraySum([2]))
+                     // (3 + 2) returns 5
+                       // (5 + arraySum[1])  ^ (5 + 1) returns 6
+                         // (1 + 0)        ^ returns 1
+
 };
 
 // 4. Check if a number is even.
+// 
 var isEven = function(n) {
+    if (n === 0) {
+        return true;
+    }
+    if (n === 1) {
+        return false;
+    }
+    if (n > 0) {
+        return (isEven(n - 2))
+    }
+    if (n < 0) {
+        return (isEven(n + 2))
+    }
 };
+
+
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+    if (n === 0) {
+        return 0;
+    }
+    if (n > 0) {
+        return ((n - 1) + sumBelow(n - 1));
+    }
+    if (n < 0) {
+        return ((n + 1) + sumBelow(n + 1));
+    }
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
-};
+    if ((Math.abs(x - y)) <= 1) {
+      return [];
+    }
+    if (x < y) {
+      if (x === y - 1) {
+        return [];
+       }
+      return ([x + 1].concat(range(x + 1, y)))
+    }
+    if (x > y) {
+      if (x === y + 1) {
+        return [];
+       }
+      return ([x - 1].concat(range(x - 1, y)))
+    }
+  };
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -40,7 +130,14 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
-};
+    if (exp === 0) {
+      return 1;
+    }
+    if (exp < 0) {
+      return Number.parseFloat(1/base * exponent(base, exp + 1)).toFixed(5);
+    }
+    return (base * exponent(base, exp - 1))
+  };
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
